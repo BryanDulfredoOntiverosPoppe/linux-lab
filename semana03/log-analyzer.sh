@@ -58,7 +58,7 @@ echo "------------------------------"
 # Extraer la hora (campo 1, luego la hora del timestamp HH:MM:SS)
 cut -d'|' -f1 "$LOGFILE" | \
     awk '{print $2}' | \
-    cut -d’:’ -f1 | \
+    cut -d':' -f1 | \
     sort | \
     uniq -c | \
     awk '{printf "  %s:00  %s eventos\n", $2, $1}'
