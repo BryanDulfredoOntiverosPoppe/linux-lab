@@ -27,7 +27,7 @@ echo ""
 echo "[1/5] TOP 10 DIRECCIONES IP"
 echo "------------------------------"
 # Extraer la columna de IP (campo 2, separador |)
-# Ordenar, contar y mostrar las 10 m  s frecuentes
+# Ordenar, contar y mostrar las 10 mas frecuentes
 cut -d'|' -f2 "$LOGFILE" | \
     tr -d ' ' | \
     sort | \
@@ -64,7 +64,7 @@ cut -d'|' -f1 "$LOGFILE" | \
     awk '{printf "  %s:00  %s eventos\n", $2, $1}'
 echo ""
 
-# [4/5] Top 5 mensajes de error  m  s frecuentes
+# [4/5] Top 5 mensajes de error  mas frecuentes
 echo "[4/5] TOP 5 MENSAJES DE ERROR"
 echo "------------------------------"
 grep -E "\| (ERROR|FATAL) \|" "$LOGFILE" | \
