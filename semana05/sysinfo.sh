@@ -78,14 +78,14 @@ seccion_cpu() {
     echo "[ CPU ]"
     echo "$SEPARADOR_SEC"
     nucleos=$(nproc)
-    carga=$(uptime | awk -F'load average:' '{print $2}' \         | awk '{print $1}' | tr -d ',')
+    carga=$(uptime | awk -F'load average:' '{print $2}' \ | awk '{print $1}' | tr -d ',')
     printf "  %-18s %s\n" "Nucleos:"      "$nucleos"
     printf "  %-18s %s\n" "Carga (1min):" "$carga"
     echo ""
 }
 
 # === Seccion 3: Memoria RAM ===
-seccion_memoria () {
+seccion_memoria() {
     echo "[ MEMORIA RAM ]"
     echo "$SEPARADOR_SEC"
     mem_total=$(free -h | awk '/^Mem:/ {print $2}')
