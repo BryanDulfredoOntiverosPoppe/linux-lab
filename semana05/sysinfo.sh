@@ -108,9 +108,11 @@ case "$MODO" in
         seccion_general
         seccion_cpu
         seccion_memoria
+        seccion_disco
         ;;
     cpu)  seccion_cpu  ;;
     mem)  seccion_memoria ;;
+    disk) seccion_disco;;
 esac
 
 # === Seccion 4: Disco ===
@@ -124,11 +126,3 @@ seccion_disco() {
         awk '{printf "  %-20s %6s %6s %6s %5s\n", $6, $2, $3, $4, $5}'
     echo ""
 }
-
-    all)
-        seccion_general
-        seccion_cpu
-        seccion_memoria
-        seccion_disco
-        ;;
-    disk) seccion_disco ;;
