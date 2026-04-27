@@ -11,7 +11,6 @@ readonly VERSION="1.0.0"
 readonly SEPARADOR="========================================"
 readonly SEPARADOR_SEC="----------------------------------------"
 
-# === Funcion de uso ===
 uso() {
     echo "Uso: $0 [opcion]"
     echo ""
@@ -24,35 +23,8 @@ uso() {
     echo "  --proc      Solo procesos"
     echo "  --version   Version del script"
     echo "  --help      Esta ayuda"
-    echo ""
-    echo "Ejemplos:"
-    echo "  $0"
-    echo "  $0 --mem"
-    echo "  $0 --disk"
     exit 2
 }
-
-# === Procesar argumentos ===
-MODO="${1:-all}"
-
-case "$MODO" in
-    --all|"all")     MODO="all"  ;;
-    --cpu)           MODO="cpu"  ;;
-    --mem)           MODO="mem"  ;;
-    --disk)          MODO="disk" ;;
-    --proc)          MODO="proc" ;;
-    --version)       echo "sysinfo.sh version $VERSION"; exit 0 ;;
-    --help|-h)       uso ;;
-    *)
-        echo "Error: opcion desconocida '$MODO'"
-        uso
-        ;;
-esac
-
-echo "$SEPARADOR"
-printf "  REPORTE DEL SISTEMA  -  sysinfo.sh v%s\n" "$VERSION"
-echo "$SEPARADOR"
-echo ""
 
 # === Seccion 1: Informacion general ===
 seccion_general() {
@@ -73,7 +45,8 @@ seccion_cpu() {
     echo "[ CPU ]"
     echo "$SEPARADOR_SEC"
     nucleos=$(nproc)
-    carga=$(uptime | awk -F'load average:' '{print $2}' \ | awk '{print $1}' | tr -d ',')
+    carga=$(uptime | awk -F'load average:' '{print $2}' \
+            | awk '{print $1}' | tr -d ',')
     printf "  %-18s %s\n" "Nucleos:"      "$nucleos"
     printf "  %-18s %s\n" "Carga (1min):" "$carga"
     echo ""
@@ -127,7 +100,28 @@ seccion_procesos() {
     echo ""
 }
 
-# === Ejecutar segun el modo ===
+# === Procesar argumento  ===
+MODO="${1:-all}"
+
+case "$MODO" in
+    --all|"all")     MODO="all"  ;;
+    --cpu)           MODO="cpu"  ;;
+    --mem)           MODO="mem"  ;;
+    --disk)          MODO="disk" ;;
+    --proc)          MODO="proc" ;;
+    --version)       echo "sysinfo.sh version $VERSION"; exit 0 ;;
+    --help|-h)       uso ;;
+    *)
+        echo "Error: opcion desconocida '$MODO'"
+        uso
+        ;;
+esac
+
+echo "$SEPARADOR"
+printf "  REPORTE DEL SISTEMA  -  sysinfo.sh v%s\n" "$VERSION"
+echo "$SEPARADOR"
+echo ""
+
 case "$MODO" in
     all)
         seccion_general
