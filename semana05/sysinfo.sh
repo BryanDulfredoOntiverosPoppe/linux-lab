@@ -68,11 +68,6 @@ seccion_general() {
     echo ""
 }
 
-# === Ejecutar segun el modo ===
-if [ "$MODO" = "all" ]; then
-    seccion_general
-fi
-
 # === Seccion 2: CPU ===
 seccion_cpu() {
     echo "[ CPU ]"
