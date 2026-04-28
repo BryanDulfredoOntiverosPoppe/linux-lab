@@ -113,6 +113,29 @@ verificar_archivos() {
     return 0
 }
 
+# === Verificacion 3: antiguedad del ultimo backup ===
+verificar_antiguedad() {
+    log "INFO" "Verificando antiguedad del backup mas reciente..."
+
+    # Contar archivos modificados en las ultimas MAX_HORAS horas
+    # find -mtime -1 equivale a "modificado hace menos de 24 horas"
+    local dias_limite=$(( MAX_HORAS_SIN_BACKUP / 24 ))
+    [ "$dias_limite" -eq 0 ] && dias_limite=1
+
+    local recientes
+    recientes=$(find "$DIR_BACKUP" -maxdepth 1 -type f \
+                -name "*.tar.gz" -mtime -"$dias_limite" | wc -l)
+
+    if [ "$recientes" -eq 0 ]; then
+        log "WARNING" \
+            "No hay backups de las ultimas ${MAX_HORAS_SIN_BACKUP}h."
+        return 0
+    fi
+
+    log "OK" "$recientes backup(s) recientes (ultimas ${MAX_HORAS_SIN_BACKUP}h)."
+    return 0
+}
+
 # === Inicio del reporte ===
 log "INFO" "=== backup-check.sh v$VERSION - Inicio ==="
 log "INFO" "Directorio objetivo: $DIR_BACKUP"
