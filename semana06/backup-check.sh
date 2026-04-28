@@ -55,12 +55,6 @@ log() {
     fi
 }
 
-# === Procesar argumentos especiales ===
-case "${1:-}" in
-    --version) echo "backup-check.sh v$VERSION"; exit 0 ;;
-    --help|-h) uso ;;
-esac
-
 # === Verificacion 1: existencia del directorio ===
 verificar_directorio() {
     log "INFO" "Verificando directorio: $DIR_BACKUP"
@@ -161,7 +155,14 @@ verificar_tamanio() {
     return 0
 }
 
+# === Procesar argumentos especiales ===
+case " {1:-}" in
+    --version) echo "backup-check.sh v$VERSION"; exit 0 ;;
+    --help|-h) uso ;;
+esac
+
 # === Inicio del reporte ===
+mkdir -p "$DIR_LOGS"
 log "INFO" "=== backup-check.sh v$VERSION - Inicio ==="
 log "INFO" "Directorio objetivo: $DIR_BACKUP"
 
@@ -171,6 +172,10 @@ if ! verificar_directorio; then
     log "ERROR" "Verificacion abortada: directorio inaccesible."
     exit 1
 fi
+
+verificar_archivos
+verificar_antiguedad
+verificar_tamanio
 
 # === Estado final ===
 log "INFO" "=== Verificacion completada ==="
