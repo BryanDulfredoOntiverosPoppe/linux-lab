@@ -171,3 +171,21 @@ if ! verificar_directorio; then
     log "ERROR" "Verificacion abortada: directorio inaccesible."
     exit 1
 fi
+
+# === Estado final ===
+log "INFO" "=== Verificacion completada ==="
+
+case "$estado_global" in
+    OK)
+        log "OK"      "RESULTADO: todos los checks pasaron correctamente."
+        exit 0
+        ;;
+    WARNING)
+        log "WARNING" "RESULTADO: verificacion completada con advertencias."
+        exit 0
+        ;;
+    ERROR)
+        log "ERROR"   "RESULTADO: se detectaron errores que requieren atencion."
+        exit 1
+        ;;
+esac
