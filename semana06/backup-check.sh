@@ -84,6 +84,35 @@ verificar_directorio() {
     return 0
 }
 
+# === Verificacion 2: existencia de archivos de backup ===
+verificar_archivos() {
+    log "INFO" "Buscando archivos de backup (*.tar.gz)..."
+
+    local total
+    total=$(find "$DIR_BACKUP" -maxdepth 1 -type f \
+            -name "*.tar.gz" | wc -l)
+
+    if [ "$total" -eq 0 ]; then
+        log "ERROR" "No se encontraron archivos .tar.gz en $DIR_BACKUP"
+        return 1
+    fi
+
+    log "OK" "Se encontraron $total archivo(s) de backup."
+
+    # Verificar que el mas reciente no esta vacio
+    local ultimo
+    ultimo=$(find "$DIR_BACKUP" -maxdepth 1 -type f \
+             -name "*.tar.gz" | sort | tail -1)
+
+    if [ ! -s "$ultimo" ]; then
+        log "WARNING" "El archivo mas reciente esta vacio:$ultimo"
+        return 0
+    fi
+
+    log "OK" "Ultimo backup: $(basename "$ultimo")"
+    return 0
+}
+
 # === Inicio del reporte ===
 log "INFO" "=== backup-check.sh v$VERSION - Inicio ==="
 log "INFO" "Directorio objetivo: $DIR_BACKUP"
