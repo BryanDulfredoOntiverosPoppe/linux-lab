@@ -20,10 +20,6 @@ uso() {
     echo "  --umbral-disco N  Alerta de disco en %"
     echo "  --umbral-ram N    Alerta de RAM en %"
     echo "  --version         Version del script"
-    echo ""
-    echo "Ejemplos:"
-    echo "  $0 --intervalo 5 --max 12"
-    echo "  $0 --umbral-disco 70"
     exit 2
 }
 
@@ -35,8 +31,7 @@ uso_disco() {
 # Retorna el porcentaje de RAM usada
 uso_ram() {
     free | awk '/^Mem:/ {
-        printf "%.0f", ($3 / $2) * 100
-    }'
+        printf "%.0f", ($3/$2)*100}'
 }
 
 # Retorna el load average del ultimo minuto
@@ -65,7 +60,6 @@ resumen_log() {
             || echo 0)
     alertas=$(grep -c "\[ALERTA \]" "$LOGFILE" 2>/dev/null \
               || echo 0)
-
     printf "  %-25s %d\n" "Comprobaciones totales:" "$total"
     printf "  %-25s %d\n" "Alertas emitidas:"       "$alertas"
     echo ""
@@ -93,6 +87,7 @@ done
 
 # Manejo de Ctrl+C: mostrar resumen antes de salir
 trap 'echo "";
+      resumen_log;
       registrar "INFO" "Monitor detenido por el usuario.";
       exit 0' INT
 
@@ -131,3 +126,7 @@ while true; do
 
     sleep "$INTERVALO"
 done
+
+resumen_log
+registrar "INFO" \
+    "Monitor finalizado tras $((iteracion-1)) iteraciones."
